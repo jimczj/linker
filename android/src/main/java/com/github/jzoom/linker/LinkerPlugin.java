@@ -119,8 +119,7 @@ public class LinkerPlugin implements MethodCallHandler, PluginRegistry.ActivityR
         setValueToIntent(key,value,intent);
       }
     }
-
-
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
     return intent;
 
   }

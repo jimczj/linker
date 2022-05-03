@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Intent;
 import 'dart:async';
 
 import 'package:flutter/services.dart';
@@ -18,7 +18,7 @@ class Button extends StatelessWidget {
 
   final VoidCallback onPressed;
 
-  Button({this.label, this.onPressed});
+  Button({required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class Button extends StatelessWidget {
         onPressed: onPressed,
         color: Colors.blueAccent,
         textColor: Colors.white,
-        child: new Text(label));
+        child: Text(label));
   }
 }
 
@@ -49,7 +49,7 @@ class AndroidExample extends StatelessWidget {
           new Button(
               onPressed: () async {
                 try {
-                  await Linker.startActivity(new Intent.fromAction(Intent.ACTION_VIEW,
+                  await Linker.startActivity(Intent.fromAction(Intent.ACTION_VIEW,
                       uri: Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=123456")));
                 } on PlatformException catch (e) {
                   print("Open failed $e");
@@ -77,7 +77,7 @@ class AndroidExample extends StatelessWidget {
           new Button(
               onPressed: () async {
                 try {
-                  await Linker.startActivity(new Intent.fromAction(
+                  await Linker.startActivity(Intent.fromAction(
                     "android.intent.action.VIEW",
                     uri: Uri.parse(
                         "http://ditu.google.cn/maps?hl=zh&mrt=loc&q=31.1198723,121.1099877(上海青浦大街100号)"),

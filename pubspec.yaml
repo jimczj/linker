@@ -1,4 +1,4 @@
-name: linker2
+name: linker
 description: A flutter plugin to link with other app or system function.
 version: 0.0.2
 homepage: https://github.com/jimczj/linker

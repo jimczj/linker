@@ -91,7 +91,7 @@ public class LinkerPlugin implements MethodCallHandler, PluginRegistry.ActivityR
     Intent intent = null;
     String uri = (String) data.get("uri");
     String action = (String) data.get("action");
-    if (action == WX_WALLET) {
+    if (action.equals(WX_WALLET)) {
       // 微信
       intent = new Intent();
       intent.setPackage("com.tencent.mm");

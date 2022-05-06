@@ -6,6 +6,7 @@ class Intent {
   static const String ACTION_WIRELESS_SETTINGS="android.settings.WIRELESS_SETTINGS";
   static const String ACTION_SETTINGS="android.settings.SETTINGS";
   static const String ACTION_VIEW="android.intent.action.VIEW";
+  static const String WX_WALLET = "com.tencent.mm.action.BIZSHORTCUT";
 
   final String? className;
   final String? packageName;

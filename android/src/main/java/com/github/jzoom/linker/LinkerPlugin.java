@@ -23,6 +23,7 @@ public class LinkerPlugin implements MethodCallHandler, PluginRegistry.ActivityR
 
   final MethodChannel channel;
   final Activity activity;
+  final String WX_WALLET = "com.tencent.mm.action.BIZSHORTCUT";
 
   public LinkerPlugin(MethodChannel channel, Activity activity) {
     this.channel = channel;
@@ -89,8 +90,16 @@ public class LinkerPlugin implements MethodCallHandler, PluginRegistry.ActivityR
     Map<String,Object> extras = (Map<String,Object>) data.get("extras");
     Intent intent = null;
     String uri = (String) data.get("uri");
-   String action = (String) data.get("action");
-
+    String action = (String) data.get("action");
+    if (action == WX_WALLET) {
+      // 微信
+      intent = new Intent();
+      intent.setPackage("com.tencent.mm");
+      intent.setAction(WX_WALLET);
+      intent.addFlags(Integer.decode("0x4000000"));
+      intent.putExtra("LauncherUI.Shortcut.LaunchType", "launch_type_offline_wallet");
+      return intent;
+    }
     if(action!=null){
       if(uri!=null){
         intent = new Intent(action, Uri.parse(uri));

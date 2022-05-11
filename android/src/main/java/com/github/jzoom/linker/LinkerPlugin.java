@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.provider.Settings;
 
 import java.util.HashMap;
@@ -86,12 +87,11 @@ public class LinkerPlugin implements MethodCallHandler, PluginRegistry.ActivityR
 
   }
   private Intent parseIntent( Map data ){
-
     Map<String,Object> extras = (Map<String,Object>) data.get("extras");
     Intent intent = null;
     String uri = (String) data.get("uri");
     String action = (String) data.get("action");
-    if (action.equals(WX_WALLET)) {
+    if (action != null && action.equals(WX_WALLET)) {
       // 微信
       intent = new Intent();
       intent.setPackage("com.tencent.mm");

@@ -96,7 +96,8 @@ public class LinkerPlugin implements MethodCallHandler, PluginRegistry.ActivityR
       intent = new Intent();
       intent.setPackage("com.tencent.mm");
       intent.setAction(WX_WALLET);
-      intent.addFlags(Integer.decode("0x4000000"));
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+      // intent.addFlags(Integer.decode("0x4000000"));
       intent.putExtra("LauncherUI.Shortcut.LaunchType", "launch_type_offline_wallet");
       return intent;
     }

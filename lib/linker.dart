@@ -123,6 +123,12 @@ class Linker {
     var value = await _channel.invokeMethod("openSetting");
     return value as bool;
   }
+
+  static Future<bool> openBackgroundSetting() async {
+    var value = await _channel.invokeMethod("openBackgroundSetting");
+    return value as bool;
+  }
+
   static Future<bool> openNetworkSetting() async{
     if(Platform.isAndroid) {
       return startActivity(Intent.fromAction(Intent.ACTION_WIRELESS_SETTINGS));

@@ -1,16 +1,19 @@
 package com.github.jzoom.linker;
 
 import android.app.Activity;
+import android.util.Log;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.provider.Settings;
+import android.content.ComponentName;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.LogManager;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -29,8 +32,6 @@ public class LinkerPlugin implements MethodCallHandler, PluginRegistry.ActivityR
   public LinkerPlugin(MethodChannel channel, Activity activity) {
     this.channel = channel;
     this.activity = activity;
-
-
   }
 
   /** Plugin registration. */
@@ -178,10 +179,182 @@ public class LinkerPlugin implements MethodCallHandler, PluginRegistry.ActivityR
       }
       activity.startActivity(intent);
       result.success(true);
-    }  else {
+    } else if ("openBackgroundSetting".equals(method)) {
+      Intent intent =  new Intent(Settings.ACTION_SETTINGS);    
+      activity.startActivity(intent);
+      result.success(true);
+      // result.success(goSettingPage());
+    } else {
       result.notImplemented();
     }
   }
+
+  private boolean goSettingPage() {
+    try {
+      if (isHuawei()) {
+        goHuaweiSetting();
+        return true;
+      }
+      if (isHonor()) {
+        goHonorSetting();
+        return true;
+      }
+      if (isOppo()) {
+        goOPPOSetting();
+        return true;
+      }
+      if (isVIVO()) {
+        goVIVOSetting();
+        return true;
+      }
+      if (isLeTV()) {
+        goLetvSetting();
+        return true;
+      }
+      if (isMeizu()) {
+        goMeizuSetting();
+        return true;
+      }
+      if (isSamsung()) {
+        goSamsungSetting();
+        return true;
+      }
+      if (isSmartisan()) {
+        goSmartisanSetting();
+        return true;
+      }      
+    } catch (Exception e) {
+    }
+    return false;
+  }
+
+  // 后台权限跳转页面
+  private void goHuaweiSetting() {
+    try {
+      showActivity("com.huawei.systemmanager",
+          "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity");
+    } catch (Exception e) {
+      showActivity("com.huawei.systemmanager",
+          "com.huawei.systemmanager.optimize.bootstart.BootStartActivity");
+    }
+  }
+
+  private void goHonorSetting() {
+    try {
+      
+      showActivity("com.hihonor.devicemanager");
+    } catch (Exception e) {
+      Log.e("jimtest",e.getMessage());
+    }
+  }
+
+  private void goXiaomiSetting() {
+    showActivity("com.miui.securitycenter",
+        "com.miui.permcenter.autostart.AutoStartManagementActivity");
+  }
+
+  private void goOPPOSetting() {
+    try {
+        showActivity("com.coloros.phonemanager");
+    } catch (Exception e1) {
+        try {
+            showActivity("com.oppo.safe");
+        } catch (Exception e2) {
+            try {
+                showActivity("com.coloros.oppoguardelf");
+            } catch (Exception e3) {
+                showActivity("com.coloros.safecenter");
+            }
+        }
+    }
+  }
+
+  private void goVIVOSetting() {
+    try {
+      showActivity("com.iqoo.secure");
+    } catch (Exception e) {
+    }
+  }
+
+  private void goMeizuSetting() {
+    showActivity("com.meizu.safe");
+  }
+
+  private void goSamsungSetting() {
+    try {
+        showActivity("com.samsung.android.sm_cn");
+    } catch (Exception e) {
+        showActivity("com.samsung.android.sm");
+    }
+  }
+
+  private void goLetvSetting() {
+    showActivity("com.letv.android.letvsafe",
+        "com.letv.android.letvsafe.AutobootManageActivity");
+  }
+
+  private void goSmartisanSetting() {
+    showActivity("com.smartisanos.security");
+  }
+
+  /**
+   * 跳转到指定应用的首页
+   */
+  private void showActivity(String packageName) {
+      Intent intent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
+      activity.startActivity(intent);
+  }
+
+  /**
+   * 跳转到指定应用的指定页面
+   */
+  private void showActivity(String packageName, String activityDir) {
+      Intent intent = new Intent();
+      intent.setComponent(new ComponentName(packageName, activityDir));
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      activity.startActivity(intent);
+  }
+
+  // 是否是华为
+  public static boolean isHuawei() {
+    return Build.BRAND != null && Build.BRAND.toLowerCase().equals("huawei");
+  }
+
+  // 是否是荣耀
+  public static boolean isHonor() {
+    return Build.BRAND != null && Build.BRAND.toLowerCase().equals("honor");
+  }
+
+  // 是否是小米
+  public static boolean isXiaomi() {
+    return Build.BRAND != null && Build.BRAND.toLowerCase().equals("xiaomi");
+  }
+
+  public static boolean isOppo() {
+    return Build.BRAND != null && Build.BRAND.toLowerCase().equals("oppo");
+  }
+
+  public static boolean isVIVO() {
+    return Build.BRAND != null && Build.BRAND.toLowerCase().equals("vivo");
+  }
+
+  public static boolean isMeizu() {
+    return Build.BRAND != null && Build.BRAND.toLowerCase().equals("meizu");
+  }
+
+  public static boolean isSamsung() {
+    return Build.BRAND != null && Build.BRAND.toLowerCase().equals("samsung");
+  }
+
+  public static boolean isLeTV() {
+    return Build.BRAND != null && Build.BRAND.toLowerCase().equals("letv");
+  }
+
+  public static boolean isSmartisan() {
+    return Build.BRAND != null && Build.BRAND.toLowerCase().equals("smartisan");
+  }
+
+
 
   private String getPackageName() {
     return activity.getPackageName();

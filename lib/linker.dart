@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 
 class Intent {
-  static const String ACTION_WIRELESS_SETTINGS="android.settings.WIRELESS_SETTINGS";
-  static const String ACTION_SETTINGS="android.settings.SETTINGS";
-  static const String ACTION_VIEW="android.intent.action.VIEW";
-  static const String WX_WALLET = "com.tencent.mm.action.BIZSHORTCUT";
+  static const String ACTION_WIRELESS_SETTINGS =
+      "android.settings.WIRELESS_SETTINGS";
+  static const String ACTION_SETTINGS = "android.settings.SETTINGS";
+  static const String ACTION_VIEW = "android.intent.action.VIEW";
 
   final String? className;
   final String? packageName;
@@ -17,16 +17,21 @@ class Intent {
   Intent._(
       {this.className, this.action, this.packageName, this.uri, this.extras});
 
-  factory Intent.fromAction(String action, {Uri? uri, String? packageName, String? className}) {
-    return  Intent._(
+  factory Intent.fromAction(String action,
+      {Uri? uri, String? packageName, String? className}) {
+    return Intent._(
         action: action,
         uri: uri,
         className: className,
         packageName: packageName);
   }
 
-  factory Intent.callApp({required String className, required String packageName, Map<String, dynamic>? extras}) {
-    return Intent._(packageName: packageName, className: className, extras: extras);
+  factory Intent.callApp(
+      {required String className,
+      required String packageName,
+      Map<String, dynamic>? extras}) {
+    return Intent._(
+        packageName: packageName, className: className, extras: extras);
   }
 
   Map toMap() {
@@ -66,10 +71,9 @@ class ActivityResult {
       intent = Intent._(action: _intent['action']);
     }
     return ActivityResult._(
-      requestCode: map['requestCode'],
-      resultCode: map['resultCode'],
-      intent: intent
-    );
+        requestCode: map['requestCode'],
+        resultCode: map['resultCode'],
+        intent: intent);
   }
 
   @override
@@ -93,14 +97,15 @@ class Linker {
   /// IOS only,
   static Future<bool> openURL(String url) async {
     if (!Platform.isIOS) {
-      throw  Exception("This method must be called in ios");
+      throw Exception("This method must be called in ios");
     }
     dynamic value = await _channel.invokeMethod("openURL", url);
     return value as bool;
   }
 
   /// android only
-  static Future<ActivityResult> startActivityForResult(Intent intent, int requestCode) async {
+  static Future<ActivityResult> startActivityForResult(
+      Intent intent, int requestCode) async {
     if (!Platform.isAndroid) {
       throw Exception("This method must be called in android");
     }
@@ -115,11 +120,12 @@ class Linker {
     if (!Platform.isAndroid) {
       throw Exception("This method must be called in android");
     }
-    dynamic value = await _channel.invokeMethod("startActivity", intent.toMap());
+    dynamic value =
+        await _channel.invokeMethod("startActivity", intent.toMap());
     return value as bool;
   }
 
-  static Future<bool> openSetting() async{
+  static Future<bool> openSetting() async {
     var value = await _channel.invokeMethod("openSetting");
     return value as bool;
   }
@@ -129,8 +135,8 @@ class Linker {
     return value as bool;
   }
 
-  static Future<bool> openNetworkSetting() async{
-    if(Platform.isAndroid) {
+  static Future<bool> openNetworkSetting() async {
+    if (Platform.isAndroid) {
       return startActivity(Intent.fromAction(Intent.ACTION_WIRELESS_SETTINGS));
     } else {
       return openSetting();

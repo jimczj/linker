@@ -92,7 +92,7 @@ public class LinkerPlugin implements MethodCallHandler, PluginRegistry.ActivityR
     String uri = (String) data.get("uri");
     String action = (String) data.get("action");
     // intent 协议处理
-    if (uri != null && (uri.startsWith("intent:") || uri.startsWith("android-app:"))  && uri.contains("#Intent")) {
+    if (uri != null && (uri.startsWith("intent:") || uri.startsWith("android-app:"))) {
       try {
         intent = Intent.parseUri(uri, Intent.URI_INTENT_SCHEME);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
